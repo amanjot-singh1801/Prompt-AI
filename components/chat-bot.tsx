@@ -105,7 +105,6 @@ export function ChatBot({ chatId, initialMessages = [] }: Props) {
       textareaRef.current.style.height = "auto";
     }
     
-    // In v5+, we pass an object with the 'text' property
     await sendMessage({ text });
     
     if (isFirstMessage && typeof window !== "undefined") {
