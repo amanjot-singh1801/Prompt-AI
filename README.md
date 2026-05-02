@@ -210,7 +210,7 @@ AUTH_SECRET=your_secret_here
 AUTH_URL=http://localhost:3000
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
-
+  
 # Database
 MONGODB_URI=mongodb+srv://...
 
