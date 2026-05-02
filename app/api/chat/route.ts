@@ -55,6 +55,8 @@ export async function POST(req: Request) {
       { streamMode: ["values", "messages"] }
     );
 
+    console.log("Stream : ",stream);
+
     const uiStream = toUIMessageStream(stream, {
       onFinal: async (completion: string) => {
         try {

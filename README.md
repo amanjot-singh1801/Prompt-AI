@@ -1,4 +1,4 @@
-# WeLaunch.AI — AI Web Chat Application
+# Prompt.AI — AI Web Chat Application
 
 A modern AI‑powered web chat application built with Next.js App Router, MongoDB, OpenRouter, and LangChain/LangGraph. It supports authentication, workspace‑based chat organization, persistent chat history, real‑time streaming responses, and web‑search tool calling.
 
@@ -23,7 +23,6 @@ A modern AI‑powered web chat application built with Next.js App Router, MongoD
 
 ## 1. Overview
 
-This project was created for a 48‑hour engineering assignment to build a production‑style AI chat app with:
 
 - User authentication
 - Workspace/project separation
@@ -82,11 +81,8 @@ Home / Workspace Selection
 Chat History (Persistent)
 ![Chat History](outputImages/chat-history-1.png)
 
-Chat History (Alternate)
-![Chat History Alt](outputImages/chat-history-2.png)
-
 Web Search Tool Calling
-![Web Search](outputImages/web-search.png)
+![Web Search](outputImages/chat-history-2.png)
 
 ---
 

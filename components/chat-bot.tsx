@@ -13,8 +13,10 @@ interface Props {
 }
 
 function toUserFriendlyError(message: string) {
+  console.log("Message : ", message);
   const text = message.toLowerCase();
 
+  console.log("Text : ", text);
   if (
     text.includes("model_authentication") ||
     text.includes("401 user not found") ||
@@ -33,9 +35,10 @@ function toUserFriendlyError(message: string) {
 
 const sampleQuestions = [
   "What's the latest news about AI?",
-  "Explain quantum computing simply",
+  "Latest movie and OTT releases?",
   "What are the top tech trends right now?",
-  "Search for recent breakthroughs in science",
+  "What is Bitcoin's price right now?",
+  "Any recent SpaceX launches?"
 ];
 
 export function ChatBot({ chatId, initialMessages = [] }: Props) {
@@ -50,11 +53,24 @@ export function ChatBot({ chatId, initialMessages = [] }: Props) {
         api: "/api/chat",
         body: { chatId },
       }),
-    [chatId]
+    [chatId],
   );
 
+  // In the new AI SDK, you must use DefaultChatTransport
+  // and pass the body using prepareSendMessagesRequest
   const { messages, sendMessage, status } = useChat({
-    transport,
+    transport: new DefaultChatTransport({
+      api: "/api/chat",
+      prepareSendMessagesRequest: ({ messages, trigger, messageId }) => ({
+        // This is the correct way to attach your chatId in v5+
+        body: {
+          messages,
+          trigger,
+          messageId,
+          chatId,
+        },
+      }),
+    }),
     messages: initialMessages,
     onError: (error) => {
       setChatError(toUserFriendlyError(error.message || "Request failed"));
@@ -80,13 +96,18 @@ export function ChatBot({ chatId, initialMessages = [] }: Props) {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
     setChatError(null);
+    
     const text = input;
     const isFirstMessage = messages.length === 0;
     setInput("");
+    
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
     }
+    
+    // In v5+, we pass an object with the 'text' property
     await sendMessage({ text });
+    
     if (isFirstMessage && typeof window !== "undefined") {
       const title = text.slice(0, 80);
       window.dispatchEvent(
@@ -122,7 +143,9 @@ export function ChatBot({ chatId, initialMessages = [] }: Props) {
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 mb-6">
                 <Sparkles className="h-7 w-7 text-primary" />
               </div>
-              <h2 className="text-2xl font-semibold mb-1">How can I help you today?</h2>
+              <h2 className="text-2xl font-semibold mb-1">
+                How can I help you today?
+              </h2>
               <p className="text-sm text-muted-foreground mb-10">
                 Ask me anything or try one of these
               </p>

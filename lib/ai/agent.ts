@@ -92,12 +92,14 @@ import { createReactAgent } from "@langchain/langgraph/prebuilt";
 import { TavilySearch } from "@langchain/tavily";
 
 const model = new ChatOpenAI({
-  model: "gpt-4o",
+  model: "google/gemini-2.0-flash-001",
   configuration: {
     baseURL: "https://openrouter.ai/api/v1",
     apiKey: process.env.OPENROUTER_API_KEY!,
   },
 });
+
+// console.log("MODEL : ",model);
 
 const tavilySearch = new TavilySearch({
   maxResults: 5,
@@ -108,7 +110,13 @@ export const agent = createReactAgent({
   tools: [tavilySearch],
   prompt: `You are a helpful AI assistant with access to web search capabilities.
 
-When users ask about current events, recent news, or anything requiring up-to-date information, use the tavily_search tool to find relevant results.
-
-Format your responses in markdown when appropriate. Be concise and helpful.`,
+  You MUST use the tavily_search tool for:
+  - Any question about current events or news
+  - Any question about real people, places, or facts
+  - Any question that could have changed recently
+  - When the user asks "what is my name" or personal context questions
+  If the user asks for the weather, DO NOT just search "weather in [location]". 
+  Visual widgets cannot be read. You MUST search specifically for text reports, like: "current temperature [location] timeanddate" or "weather conditions [location] accuweather
+  NEVER answer factual questions from memory. ALWAYS search first.
+  Format your responses in markdown when appropriate. Be concise and helpful.`,
 });
